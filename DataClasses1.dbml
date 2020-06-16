@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Ecommerce" Class="DataClasses1DataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=localhost;Initial Catalog=Ecommerce;Integrated Security=True" SettingsObjectName="TheMerchShopGui.Properties.Settings" SettingsPropertyName="EcommerceConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Account" Member="Accounts">
+    <Type Name="Account">
+      <Column Name="AccountID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Customer" Type="System.String" DbType="VarChar(45)" CanBeNull="true" />
+      <Column Name="Cash" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
+      <Column Name="Debt" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
+      <Association Name="Customer_Account" Member="Customer1" ThisKey="Customer" OtherKey="Username" Type="Customer" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CartItem" Member="CartItems">
+    <Type Name="CartItem">
+      <Column Name="CartItemID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CustomerCart" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SKU" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DateAdded" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Association Name="CustomerCart_CartItem" Member="CustomerCart1" ThisKey="CustomerCart" OtherKey="CustomerCartID" Type="CustomerCart" IsForeignKey="true" />
+      <Association Name="Product_CartItem" Member="Product" ThisKey="SKU" OtherKey="SKU" Type="Product" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Category" Member="Categories">
+    <Type Name="Category">
+      <Column Name="CategoryID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(45)" CanBeNull="true" />
+      <Association Name="Category_Product" Member="Products" ThisKey="CategoryID" OtherKey="Category" Type="Product" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Customer" Member="Customers">
+    <Type Name="Customer">
+      <Column Name="Username" Type="System.String" DbType="VarChar(45) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Password" Type="System.String" DbType="VarChar(45) NOT NULL" CanBeNull="false" />
+      <Column Name="SignedUpDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Association Name="Customer_Account" Member="Accounts" ThisKey="Username" OtherKey="Customer" Type="Account" />
+      <Association Name="Customer_CustomerCart" Member="CustomerCarts" ThisKey="Username" OtherKey="Customer" Type="CustomerCart" />
+      <Association Name="Customer_OrderItem" Member="OrderItems" ThisKey="Username" OtherKey="Customer" Type="OrderItem" />
+      <Association Name="Customer_PurchaseOrder" Member="PurchaseOrders" ThisKey="Username" OtherKey="Customer" Type="PurchaseOrder" />
+      <Association Name="Customer_Payment" Member="Payments" ThisKey="Username" OtherKey="Customer" Type="Payment" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CustomerCart" Member="CustomerCarts">
+    <Type Name="CustomerCart">
+      <Column Name="CustomerCartID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Customer" Type="System.String" DbType="VarChar(45)" CanBeNull="true" />
+      <Association Name="CustomerCart_CartItem" Member="CartItems" ThisKey="CustomerCartID" OtherKey="CustomerCart" Type="CartItem" />
+      <Association Name="Customer_CustomerCart" Member="Customer1" ThisKey="Customer" OtherKey="Username" Type="Customer" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Inventory" Member="Inventories">
+    <Type Name="Inventory">
+      <Column Name="InventoryID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SKU" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Product_Inventory" Member="Product" ThisKey="SKU" OtherKey="SKU" Type="Product" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OrderItem" Member="OrderItems">
+    <Type Name="OrderItem">
+      <Column Name="OrderItemID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Customer" Type="System.String" DbType="VarChar(45)" CanBeNull="true" />
+      <Column Name="SKU" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PurchaseOrder" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Customer_OrderItem" Member="Customer1" ThisKey="Customer" OtherKey="Username" Type="Customer" IsForeignKey="true" />
+      <Association Name="Product_OrderItem" Member="Product" ThisKey="SKU" OtherKey="SKU" Type="Product" IsForeignKey="true" />
+      <Association Name="PurchaseOrder_OrderItem" Member="PurchaseOrder1" ThisKey="PurchaseOrder" OtherKey="OrderID" Type="PurchaseOrder" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Product" Member="Products">
+    <Type Name="Product">
+      <Column Name="SKU" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(45) NOT NULL" CanBeNull="false" />
+      <Column Name="Weight" Type="System.String" DbType="VarChar(45) NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
+      <Column Name="Category" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Product_CartItem" Member="CartItems" ThisKey="SKU" OtherKey="SKU" Type="CartItem" />
+      <Association Name="Product_Inventory" Member="Inventories" ThisKey="SKU" OtherKey="SKU" Type="Inventory" />
+      <Association Name="Product_OrderItem" Member="OrderItems" ThisKey="SKU" OtherKey="SKU" Type="OrderItem" />
+      <Association Name="Category_Product" Member="Category1" ThisKey="Category" OtherKey="CategoryID" Type="Category" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PurchaseOrder" Member="PurchaseOrders">
+    <Type Name="PurchaseOrder">
+      <Column Name="OrderID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Customer" Type="System.String" DbType="VarChar(45)" CanBeNull="true" />
+      <Column Name="OrderedDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Association Name="PurchaseOrder_OrderItem" Member="OrderItems" ThisKey="OrderID" OtherKey="PurchaseOrder" Type="OrderItem" />
+      <Association Name="Customer_PurchaseOrder" Member="Customer1" ThisKey="Customer" OtherKey="Username" Type="Customer" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Payment" Member="Payments">
+    <Type Name="Payment">
+      <Column Name="PaymentID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Customer" Type="System.String" DbType="VarChar(45)" CanBeNull="true" />
+      <Column Name="Method" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Amount" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
+      <Column Name="DatePaid" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Association Name="Customer_Payment" Member="Customer1" ThisKey="Customer" OtherKey="Username" Type="Customer" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
